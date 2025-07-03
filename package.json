@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@directus/sdk": "^20.0.0"
+    "@directus/sdk": "^20.0.0",
+    "sonic-boom": "^4.2.0"
   }
 }
