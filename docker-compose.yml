@@ -1,0 +1,47 @@
+
+
+# Daftar "layanan" atau aplikasi yang akan kita jalankan
+services:
+  # Layanan pertama: database PostgreSQL
+  postgres:
+    image: postgres:16-alpine # Menggunakan image resmi PostgreSQL versi 16
+    container_name: db_blog
+    volumes:
+      - db_data:/var/lib/postgresql/data # Menyimpan data database agar tidak hilang saat container mati
+    environment:
+      POSTGRES_USER: aldi2512      # Username untuk database
+      POSTGRES_PASSWORD: aldigaul123  # Ganti dengan password yang kuat dan aman!
+      POSTGRES_DB: directus_db     # Nama database yang akan dibuat
+    restart: always # Selalu jalankan ulang jika terjadi error
+
+  # Layanan kedua: CMS Directus
+  directus:
+    image: directus/directus:latest # Menggunakan image resmi Directus versi terbaru
+    container_name: cms_blog
+    ports:
+      - "8055:8055" # Menghubungkan port 8055 di komputer kita ke port 8055 di dalam container
+    volumes:
+      - ./uploads:/directus/uploads # Folder untuk menyimpan file yang di-upload (gambar, dll)
+      - ./extensions:/directus/extensions # Folder untuk ekstensi custom
+      - ./data:/directus/data # Folder untuk data cache dan konfigurasi Directus
+    environment:
+      KEY: "pD08aZRZvTz5cs5KyzxB814AN"   # Ganti dengan string acak, bisa pakai password generator
+      SECRET: "aMm4PQB92FWf70vRzEds679cD" # Ganti dengan string acak yang sangat kuat
+
+      DB_CLIENT: "pg"                # Memberitahu Directus kita pakai PostgreSQL
+      DB_HOST: "postgres"            # Host database, "postgres" adalah nama service di atas
+      DB_PORT: "5432"                # Port default PostgreSQL
+      DB_DATABASE: "directus_db"     # Nama database, harus sama dengan di atas
+      DB_USER: "aldi2512"            # Username, harus sama dengan di atas
+      DB_PASSWORD: "aldigaul123"        # Password, harus sama dengan di atas
+      ADMIN_EMAIL: "admin@example.com" # Email untuk akun admin pertama
+      ADMIN_PASSWORD: "aldigaul123" # Ganti dengan password admin yang kuat
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:4321"
+    depends_on:
+      - postgres # Memberitahu Docker untuk menjalankan 'postgres' terlebih dahulu sebelum 'directus'
+    restart: always
+
+# Mendefinisikan volume yang kita gunakan di atas
+volumes:
+  db_data:
