@@ -1,0 +1,9 @@
+# Folder dependensi, JANGAN disalin ke dalam image
+node_modules
+
+# File environment, akan diatur di Render/Railway
+.env
+
+# Folder Git
+.git
+.gitignore
