@@ -1,16 +1,11 @@
-# Dockerfile
+# Dockerfile (Versi Final)
 FROM directus/directus:latest
 
-# 1. Beralih sementara ke user root untuk mendapatkan izin instalasi
-USER root
-
-# 2. Install pnpm secara global sebagai root
-RUN npm install -g pnpm
-
-# 3. PENTING: Kembali ke user biasa ('node') untuk keamanan
-USER node
-
-# 4. Lanjutkan proses seperti biasa sebagai user biasa
+# Langsung salin file dependensi
 COPY ./package.json ./pnpm-lock.yaml* .
+
+# Langsung jalankan pnpm install (karena sudah tersedia di dalam image)
 RUN pnpm install --frozen-lockfile
+
+# Salin sisa file proyek
 COPY . .
